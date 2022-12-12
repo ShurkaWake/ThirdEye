@@ -11,7 +11,7 @@ using ThirdEye.Back.DataAccess.Contexts;
 namespace ThirdEye.Back.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221212153538_InitialCreate")]
+    [Migration("20221212161444_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

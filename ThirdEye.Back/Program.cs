@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSqlite<ApplicationContext>("Data Source=ThirdEyeDataBase.db");
+builder.Services.AddSqlite<ApplicationContext>("Data Source=DataAccess\\Data\\ThirdEyeDataBase.db");
 
 var app = builder.Build();
 
