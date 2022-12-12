@@ -1,16 +1,45 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using ThirdEye.Back.DataAccess.Contexts;
+using ThirdEye.Back.DataAccess.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+var configuration = builder.Configuration;
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+services.AddControllersWithViews();
+services.AddAuthentication()
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 string connectionString = builder.Configuration["DbConnectionString"];
-builder.Services.AddSqlite<ApplicationContext>(connectionString);
+services.AddSqlite<ApplicationContext>(connectionString);
+
+services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequireNonAlphanumeric = false;
+    options.SignIn.RequireConfirmedEmail = true;
+}).AddDefaultTokenProviders();
+
+services.AddControllers();
+
+services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = 403;
+        return Task.CompletedTask;
+    };
+});
 
 var app = builder.Build();
 
@@ -21,7 +50,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCookiePolicy(new CookiePolicyOptions() { MinimumSameSitePolicy = SameSiteMode.Lax });
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
