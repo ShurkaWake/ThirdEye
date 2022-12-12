@@ -1,6 +1,9 @@
-﻿namespace ThirdEye.Back.DataAccess.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace ThirdEye.Back.DataAccess.Entities
 {
-    public class User
+    public class User : IdentityUser
     {
+        public IEnumerable<InsitutionWorker> Works { get; set; }
     }
 }
