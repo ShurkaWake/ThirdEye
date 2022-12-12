@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using ThirdEye.Back.DataAccess.Contexts;
 using ThirdEye.Back.DataAccess.Entities;
+using ThirdEye.Back.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -10,6 +12,12 @@ var configuration = builder.Configuration;
 // Add services to the container.
 
 services.AddControllersWithViews();
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new UserMapper());
+});
+
+
 services.AddAuthentication()
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,8 +30,7 @@ services.AddSqlite<ApplicationContext>(connectionString);
 services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
-    options.SignIn.RequireConfirmedEmail = true;
-}).AddDefaultTokenProviders();
+}).AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
 services.AddControllers();
 
