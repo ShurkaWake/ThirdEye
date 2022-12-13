@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ThirdEye.Back.DataAccess.Contexts;
 using ThirdEye.Back.DataAccess.Entities;
 using ThirdEye.Back.Mapping;
@@ -16,7 +17,7 @@ var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new UserMapper());
 });
-
+services.AddSingleton(mapperConfig.CreateMapper() as IMapper);
 
 services.AddAuthentication()
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -25,7 +26,14 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
 string connectionString = builder.Configuration["DbConnectionString"];
-services.AddSqlite<ApplicationContext>(connectionString);
+
+services.AddDbContext<ApplicationContext>(options =>
+{
+    options.UseNpgsql(connectionString, options =>
+    {
+        options.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName);
+    });
+});
 
 services.AddIdentity<User, IdentityRole>(options =>
 {
