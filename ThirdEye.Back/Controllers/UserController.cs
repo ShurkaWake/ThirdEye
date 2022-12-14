@@ -23,6 +23,7 @@ namespace ThirdEye.Back.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ApplicationContext _context;
+        private readonly IStringLocalizer _localizer;
         private readonly IMapper _mapper;
 
         public UserController(UserManager<User> userManager,

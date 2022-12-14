@@ -28,6 +28,7 @@
   <ItemGroup>
     <Folder Include="DataAccess\Data\" />
     <Folder Include="DataAccess\Migrations\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
