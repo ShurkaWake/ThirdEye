@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using ThirdEye.Back.Extensions;
 
 namespace ThirdEye.Back.Controllers
 {
@@ -23,17 +25,19 @@ namespace ThirdEye.Back.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ApplicationContext _context;
-        private readonly IStringLocalizer _localizer;
+        private readonly IStringLocalizer<UserController> _localizer;
         private readonly IMapper _mapper;
 
         public UserController(UserManager<User> userManager,
                               SignInManager<User> signInManager,
                               ApplicationContext context,
+                              IStringLocalizer<UserController> localizer,
                               IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _localizer = localizer;
             _mapper = mapper;
         }
 
@@ -44,7 +48,15 @@ namespace ThirdEye.Back.Controllers
         {
             var result = await _signInManager.PasswordSignInAsync
                 (model.Email, model.Password, isPersistent: true, lockoutOnFailure: false);
-            return result.Succeeded ? Ok() : BadRequest("Invalid login and/or password");
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return "Invalid login and/or password".ToBadRequestUsing(_localizer);
+            }
         }
 
         [HttpPost]
@@ -52,26 +64,29 @@ namespace ThirdEye.Back.Controllers
         [ProducesResponseType(400, Type = typeof(ProblemDetails))]
         public async Task<IActionResult> RegisterAsync([FromForm] RegisterRequest model)
         {
-            if (model.Same())
+            if (!model.Same())
             {
-                var user = _mapper.Map<User>(model);
-                user.UserName = user.Email;
-                try
-                {
-                    var result = await _userManager.CreateAsync(user, model.Password);
-                    if (result.Succeeded)
-                    {
-                        return CreatedAtAction("Register", user);
-                    }
-                    return BadRequest(result.Errors.Select(e => e.Description));
-                }
-                catch
-                {
-                    await _userManager.DeleteAsync(user);
-                    return BadRequest("Something went wrong. Please try again");
-                }
+                return "Passwords are not the same".ToBadRequestUsing(_localizer);
             }
-            return BadRequest("Passwords are not the same");
+
+            var user = _mapper.Map<User>(model);
+            user.UserName = user.Email;
+
+            try
+            {
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return CreatedAtAction("Register", user);
+                }
+                    
+                return BadRequest(result.Errors.Select(e => e.Description));
+            }
+            catch
+            {
+                await _userManager.DeleteAsync(user);
+                return "Something went wrong. Please try again".ToBadRequestUsing(_localizer);
+            }
         }
 
         [Authorize]
@@ -95,7 +110,7 @@ namespace ThirdEye.Back.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return BadRequest("No such user");
+                return "No such user".ToBadRequestUsing(_localizer);
             }
 
             if(!string.IsNullOrEmpty(request.FirstName))
@@ -119,7 +134,7 @@ namespace ThirdEye.Back.Controllers
             }
             else
             {
-                return BadRequest("Unable to edit this user");
+                return "Unable to edit this user".ToBadRequestUsing(_localizer);
             }
         }
 
@@ -134,7 +149,7 @@ namespace ThirdEye.Back.Controllers
 
             if(user is null)
             {
-                return BadRequest("No such user");
+                return "No such user".ToBadRequestUsing(_localizer);
             }
 
             var response = new UserViewModel(user.Id,

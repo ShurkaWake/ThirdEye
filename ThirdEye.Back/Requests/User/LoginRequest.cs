@@ -4,10 +4,12 @@ namespace ThirdEye.Back.Requests.User
 {
     public class LoginRequest
     {
-        [EmailAddress, Required]
-        public string? Email { get; set; }
+        [Required(ErrorMessage = @"""Email"" is required field")]
+        [EmailAddress(ErrorMessage = "Invalid email")]
+        public string Email { get; set; }
 
-        [DataType(DataType.Password), Required]
-        public string? Password { get; set; }
+        [Required(ErrorMessage = @"""Password"" is required field")]
+        [DataType(DataType.Password)] 
+        public string Password { get; set; }
     }
 }

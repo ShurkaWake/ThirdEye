@@ -2,10 +2,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using ThirdEye.Back.DataAccess.Contexts;
 using ThirdEye.Back.DataAccess.Entities;
+using ThirdEye.Back.Extensions;
 using ThirdEye.Back.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +16,7 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 
-services.AddControllersWithViews();
+services.AddControllersWithViews().AddDataAnnotationsLocalization();
 var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new UserMapper());
@@ -37,14 +39,16 @@ services.AddDbContext<ApplicationContext>(options =>
     });
 });
 
-services.AddIdentity<User, IdentityRole>(options =>
-{
-    options.Password.RequireNonAlphanumeric = false;
-}).AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
-
 services.AddControllers();
 
 services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
+
+services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequireNonAlphanumeric = false;
+}).AddUkrainianIdentityErrorDescriber()
+    .AddEntityFrameworkStores<ApplicationContext>()
+    .AddDefaultTokenProviders();
 
 services.ConfigureApplicationCookie(options =>
 {

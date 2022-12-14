@@ -10,5 +10,8 @@ namespace ThirdEye.Back.Extensions
 
         public static BadRequestObjectResult ToBadRequestUsing(this string @this, IStringLocalizer localizer) =>
             new BadRequestObjectResult(new[] { @this.Using(localizer) });
+
+        public static UnauthorizedObjectResult ToUnauthorizedUsing(this string @this, IStringLocalizer localizer) =>
+            new UnauthorizedObjectResult(new[] { @this.Using(localizer) });
     }
 }

@@ -4,19 +4,22 @@ namespace ThirdEye.Back.Requests.User
 {
     public class RegisterRequest
     {
-        [EmailAddress, Required]
+        [Required(ErrorMessage = @"Email is required field")]
+        [EmailAddress(ErrorMessage = "Invalid email")]
         public string Email { get; set; }
 
-        [DataType(DataType.Password), Required]
+        [Required(ErrorMessage = @"""Password"" is required field")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [DataType(DataType.Password), Required]
+        [Required(ErrorMessage = @"""Repeat password"" is required field")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = @"""First name"" is required field")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = @"""Last name"" is required field")]
         public string LastName { get; set; }
 
         public string Patronymic { get; set; }
