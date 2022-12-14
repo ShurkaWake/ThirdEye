@@ -1,25 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using static ThirdEye.Back.Constants.Wording.UserWording;
+
 namespace ThirdEye.Back.Requests.User
 {
     public class RegisterRequest
     {
-        [Required(ErrorMessage = @"Email is required field")]
-        [EmailAddress(ErrorMessage = "Invalid email")]
+        [Required(ErrorMessage = EmailRequiredMessage)]
+        [EmailAddress(ErrorMessage = InvalidEmailMessage)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = @"""Password"" is required field")]
+        [Required(ErrorMessage = PasswordRequiredMessage)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = @"""Repeat password"" is required field")]
+        [Required(ErrorMessage = RepeatPasswordRequiredMessage)]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = @"""First name"" is required field")]
+        [Required(ErrorMessage = FirstNameRequiredMessage)]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = @"""Last name"" is required field")]
+        [Required(ErrorMessage = LastNameRequiredMessage)]
         public string LastName { get; set; }
 
         public string Patronymic { get; set; }

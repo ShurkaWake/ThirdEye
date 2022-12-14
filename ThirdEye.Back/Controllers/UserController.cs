@@ -15,6 +15,9 @@ using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ThirdEye.Back.Extensions;
+using ThirdEye.Back.Constants.Wording;
+
+using static ThirdEye.Back.Constants.Wording.UserWording;
 
 namespace ThirdEye.Back.Controllers
 {
@@ -55,7 +58,7 @@ namespace ThirdEye.Back.Controllers
             }
             else
             {
-                return "Invalid login and/or password".ToBadRequestUsing(_localizer);
+                return InvalidLoginDataMessage.ToBadRequestUsing(_localizer);
             }
         }
 
@@ -66,7 +69,7 @@ namespace ThirdEye.Back.Controllers
         {
             if (!model.Same())
             {
-                return "Passwords are not the same".ToBadRequestUsing(_localizer);
+                return PasswordMissmatchMessage.ToBadRequestUsing(_localizer);
             }
 
             var user = _mapper.Map<User>(model);
@@ -85,7 +88,7 @@ namespace ThirdEye.Back.Controllers
             catch
             {
                 await _userManager.DeleteAsync(user);
-                return "Something went wrong. Please try again".ToBadRequestUsing(_localizer);
+                return UnexpectedErrorMessage.ToBadRequestUsing(_localizer);
             }
         }
 
@@ -110,7 +113,7 @@ namespace ThirdEye.Back.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return "No such user".ToBadRequestUsing(_localizer);
+                return NullUserMessage.ToBadRequestUsing(_localizer);
             }
 
             if(!string.IsNullOrEmpty(request.FirstName))
@@ -134,7 +137,7 @@ namespace ThirdEye.Back.Controllers
             }
             else
             {
-                return "Unable to edit this user".ToBadRequestUsing(_localizer);
+                return EditErrorMessage.ToBadRequestUsing(_localizer);
             }
         }
 
@@ -149,7 +152,7 @@ namespace ThirdEye.Back.Controllers
 
             if(user is null)
             {
-                return "No such user".ToBadRequestUsing(_localizer);
+                return NullUserMessage.ToBadRequestUsing(_localizer);
             }
 
             var response = new UserViewModel(user.Id,

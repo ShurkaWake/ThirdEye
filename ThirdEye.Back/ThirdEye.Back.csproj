@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataAccess\Data\" />
     <Folder Include="DataAccess\Migrations\" />
   </ItemGroup>
 

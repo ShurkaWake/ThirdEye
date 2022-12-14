@@ -1,14 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using static ThirdEye.Back.Constants.Wording.UserWording;
+
 namespace ThirdEye.Back.Requests.User
 {
     public class LoginRequest
     {
-        [Required(ErrorMessage = @"""Email"" is required field")]
-        [EmailAddress(ErrorMessage = "Invalid email")]
+        [Required(ErrorMessage = EmailRequiredMessage)]
+        [EmailAddress(ErrorMessage = InvalidEmailMessage)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = @"""Password"" is required field")]
+        [Required(ErrorMessage = PasswordRequiredMessage)]
         [DataType(DataType.Password)] 
         public string Password { get; set; }
     }
