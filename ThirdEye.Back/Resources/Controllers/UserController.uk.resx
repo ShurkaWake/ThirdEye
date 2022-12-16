@@ -117,14 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Confirm your email" xml:space="preserve">
+    <value>Підтвердьте вашу електронну скриньку</value>
+  </data>
+  <data name="For this action your email must be confirmed" xml:space="preserve">
+    <value>Для цієї дії ваша електронна скринька має бути підтверджена</value>
+  </data>
   <data name="Invalid login and/or password" xml:space="preserve">
     <value>Неправильний логін та/або пароль</value>
+  </data>
+  <data name="Invalid user or confirmation token" xml:space="preserve">
+    <value>Неправильній користувач або токен підтверження</value>
   </data>
   <data name="No such user" xml:space="preserve">
     <value>Не існує такого користувача</value>
   </data>
   <data name="Passwords are not the same" xml:space="preserve">
     <value>Паролі не співпадають</value>
+  </data>
+  <data name="Please confirm your account by &lt;a href='{0}'&gt;clicking here&lt;/a&gt;." xml:space="preserve">
+    <value>Будь ласка підтвердьте свій аккаунт &lt;a href='{0}'&gt;клікнувши сюди&lt;/a&gt;.</value>
   </data>
   <data name="Something went wrong. Please try again" xml:space="preserve">
     <value>Щось пішло не так. Спробуйте пізніше</value>

@@ -9,12 +9,16 @@ using ThirdEye.Back.DataAccess.Contexts;
 using ThirdEye.Back.DataAccess.Entities;
 using ThirdEye.Back.Extensions;
 using ThirdEye.Back.Mapping;
+using ThirdEye.Back.Services;
+using ThirdEye.Back.Services.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
 // Add services to the container.
+
+services.AddTransient<IEmailSender, EmailSender>();
 
 services.AddControllersWithViews().AddDataAnnotationsLocalization();
 var mapperConfig = new MapperConfiguration(mc =>
@@ -45,6 +49,7 @@ services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 
 services.AddIdentity<User, IdentityRole>(options =>
 {
+    options.SignIn.RequireConfirmedEmail = true;
     options.Password.RequireNonAlphanumeric = false;
 }).AddUkrainianIdentityErrorDescriber()
     .AddEntityFrameworkStores<ApplicationContext>()
