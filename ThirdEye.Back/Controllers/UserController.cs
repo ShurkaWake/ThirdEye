@@ -21,6 +21,7 @@ using static ThirdEye.Back.Constants.Wording.UserWording;
 using Org.BouncyCastle.Asn1.IsisMtt.X509;
 using ThirdEye.Back.Services;
 using ThirdEye.Back.Services.Abstractions;
+using System.Web;
 
 namespace ThirdEye.Back.Controllers
 {
@@ -89,8 +90,8 @@ namespace ThirdEye.Back.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.ActionLink("ConfirmEmail", "User", new { user.Id, code })!;
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.ActionLink("ConfirmEmail", "User", new { id = user.Id, token = token });
 
                     var message = string.Format(EmailConfirmationMessage.Using(_localizer),
                                                 HtmlEncoder.Default.Encode(callbackUrl));
@@ -189,6 +190,7 @@ namespace ThirdEye.Back.Controllers
         [ProducesResponseType(404, Type = typeof(ProblemDetails))]
         public async Task<IActionResult> ConfirmEmailAsync(string id, string token)
         {
+            token = HttpUtility.HtmlDecode(token);
             if (id == null || token == null)
             {
                 return InvalidUserOrTokenMessage.ToBadRequestUsing(_localizer);
@@ -209,11 +211,10 @@ namespace ThirdEye.Back.Controllers
             return Ok();
         }
 
-        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> SendConfirmationEmailAsync()
+        public async Task<IActionResult> SendConfirmationEmailAsync(string email)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.FindByEmailAsync(email);
             if (user is null)
             {
                 NullUserMessage.ToBadRequestUsing(_localizer);
@@ -222,9 +223,13 @@ namespace ThirdEye.Back.Controllers
             if (!user.EmailConfirmed)
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var callbackUrl = Url.ActionLink("ConfirmEmail", "User", new { user.Id, code });
+                code = HtmlEncoder.Default.Encode(code);
+                var callbackUrl = Url.ActionLink("ConfirmEmail", 
+                                             "User", 
+                                             new { id = user.Id, token = code });
+
                 var message = string.Format(EmailConfirmationMessage.Using(_localizer),
-                                            HtmlEncoder.Default.Encode(callbackUrl));
+                                            callbackUrl);
 
                 try
                 {
