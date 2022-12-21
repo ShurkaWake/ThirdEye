@@ -5,7 +5,15 @@
 </template>
 
 <script>
+  import M from "materialize-css"
+  import 'materialize-css/dist/css/materialize.css'
+
   export default {
+    data() {
+      return {
+        inputValue: '',
+      }
+    }
   }
 </script>
 

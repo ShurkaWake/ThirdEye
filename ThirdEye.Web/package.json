@@ -8,11 +8,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "jquery": "^3.6.2",
+    "jquery-validation": "^1.19.5",
+    "jshint": "^2.13.6",
+    "materialize-css": "^1.0.0-rc.2",
     "vue": "^3.2.45",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vuelidate": "^0.7.7"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "sass": "^1.57.0",
     "vite": "^4.0.0"
   }
 }

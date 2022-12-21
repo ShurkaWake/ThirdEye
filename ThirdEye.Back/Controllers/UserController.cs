@@ -105,7 +105,7 @@ namespace ThirdEye.Back.Controllers
                     
                 return BadRequest(result.Errors.Select(e => e.Description));
             }
-            catch
+            catch (Exception e)
             {
                 await _userManager.DeleteAsync(user);
                 return UnexpectedErrorMessage.ToBadRequestUsing(_localizer);
@@ -185,65 +185,57 @@ namespace ThirdEye.Back.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400, Type = typeof(ProblemDetails))]
-        [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+        [ProducesResponseType(302)]
         public async Task<IActionResult> ConfirmEmailAsync(string id, string token)
         {
             token = HttpUtility.HtmlDecode(token);
+
+            string callbackPage = _configuration["MessagePage"];
             if (id == null || token == null)
             {
-                return InvalidUserOrTokenMessage.ToBadRequestUsing(_localizer);
+                return Redirect(string.Format(callbackPage,
+                                              InvalidUserOrTokenMessage.Using(_localizer)));
             }
 
             var user = await _userManager.FindByIdAsync(id);
             if (user is null)
             {
-                return NullUserMessage.ToNotFoundUsing(_localizer);
+                return Redirect(string.Format(callbackPage,
+                                              NullUserMessage.Using(_localizer)));
+            }
+            else if (user.EmailConfirmed)
+            {
+                return Redirect(string.Format(callbackPage,
+                                              EmailAlreadyConfirmedMessage.Using(_localizer)));
             }
 
             var result = await _userManager.ConfirmEmailAsync(user!, token);
             if (!result.Succeeded)
             {
-                return UnexpectedErrorMessage.ToBadRequestUsing(_localizer);
+                return Redirect(string.Format(callbackPage, 
+                                              UnexpectedErrorMessage.Using(_localizer)));
             }
 
-            return Ok();
+            return Redirect(string.Format(callbackPage,
+                                          EmailSuccessfullyConfirmedMessage.Using(_localizer)));
         }
 
+#if DEBUG
         [HttpGet]
-        public async Task<IActionResult> SendConfirmationEmailAsync(string email)
+        public async Task<IActionResult> DeleteUserAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user is null)
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
             {
-                NullUserMessage.ToBadRequestUsing(_localizer);
+                return Ok();
             }
-
-            if (!user.EmailConfirmed)
+            else
             {
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = HtmlEncoder.Default.Encode(code);
-                var callbackUrl = Url.ActionLink("ConfirmEmail", 
-                                             "User", 
-                                             new { id = user.Id, token = code });
-
-                var message = string.Format(EmailConfirmationMessage.Using(_localizer),
-                                            callbackUrl);
-
-                try
-                {
-                    await _emailSender.SendEmailAsync(user.Email,
-                                                      EmailConfirmationSubject.Using(_localizer),
-                                                      message);
-                }
-                catch
-                {
-                    UnexpectedErrorMessage.ToBadRequestUsing(_localizer);
-                }
+                return BadRequest();
             }
-
-            return Ok();
         }
     }
+#endif
 }

@@ -1,10 +1,15 @@
-import ConfirmEmailPage from "@/pages/ConfirmEmailPage.vue"
+import MessagePage from "@/pages/MessagePage.vue"
+import ResetPasswordPage from "@/pages/ResetPasswordPage.vue"
 import {createRouter, createWebHistory} from "vue-router"
 
 const routes = [
     {
-        path: "/confirm-email/:message/",
-        component: ConfirmEmailPage,
+        path: "/message/:message/",
+        component: MessagePage,
+    },
+    {
+        path: "/reset/:email/:token",
+        component: ResetPasswordPage,
     }
 ]
 

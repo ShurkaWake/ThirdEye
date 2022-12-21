@@ -120,11 +120,14 @@
   <data name="Confirm your email" xml:space="preserve">
     <value>Підтвердьте вашу електронну скриньку</value>
   </data>
+  <data name="Email successfully confirmed" xml:space="preserve">
+    <value>Електронна скринька успішно підтверджена</value>
+  </data>
   <data name="For this action your email must be confirmed" xml:space="preserve">
     <value>Для цієї дії ваша електронна скринька має бути підтверджена</value>
   </data>
-  <data name="Invalid login and/or password" xml:space="preserve">
-    <value>Неправильний логін та/або пароль</value>
+  <data name="Invalid login or password or email not confirmed" xml:space="preserve">
+    <value>Неправильний логін або пароль або електронна скринька не підтверджена</value>
   </data>
   <data name="Invalid user or confirmation token" xml:space="preserve">
     <value>Неправильній користувач або токен підтверження</value>
@@ -140,6 +143,9 @@
   </data>
   <data name="Something went wrong. Please try again" xml:space="preserve">
     <value>Щось пішло не так. Спробуйте пізніше</value>
+  </data>
+  <data name="This account has already confirmed email" xml:space="preserve">
+    <value>У цього облікового запису вже підтверджена електронна пошта</value>
   </data>
   <data name="Unable to edit this user" xml:space="preserve">
     <value>Неможливо відредагувати цього користувача</value>

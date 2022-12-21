@@ -2,13 +2,15 @@
 {
     public static class UserWording
     {
-        public const string InvalidLoginDataMessage = "Invalid login and/or password";
+        public const string InvalidLoginDataMessage = "Invalid login or password or email not confirmed";
         public const string PasswordMissmatchMessage = "Passwords are not the same";
         public const string UnexpectedErrorMessage = "Something went wrong. Please try again";
         public const string NullUserMessage = "No such user";
         public const string EditErrorMessage = "Unable to edit this user";
         public const string InvalidUserOrTokenMessage = "Invalid user or confirmation token";
         public const string EmailConfirmationNeededMessage = "For this action your email must be confirmed";
+        public const string EmailAlreadyConfirmedMessage = "This account has already confirmed email";
+        public const string EmailSuccessfullyConfirmedMessage = "Email successfully confirmed";
 
         public const string EmailConfirmationMessage = "Please confirm your account by <a href='{0}'>clicking here</a>.";
         public const string EmailConfirmationSubject = "Confirm your email";
