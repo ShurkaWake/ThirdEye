@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThirdEye.Back.DataAccess.Contexts;
@@ -11,9 +12,11 @@ using ThirdEye.Back.DataAccess.Contexts;
 namespace ThirdEye.Back.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221221121750_AddedRequiredFields")]
+    partial class AddedRequiredFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,6 +166,7 @@ namespace ThirdEye.Back.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -253,7 +257,7 @@ namespace ThirdEye.Back.DataAccess.Migrations
                     b.Property<DateTime>("ChangeTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("RoomChangedId")
+                    b.Property<int?>("RoomChangedId")
                         .HasColumnType("integer");
 
                     b.Property<int>("State")
@@ -286,9 +290,11 @@ namespace ThirdEye.Back.DataAccess.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
@@ -431,9 +437,7 @@ namespace ThirdEye.Back.DataAccess.Migrations
                 {
                     b.HasOne("ThirdEye.Back.DataAccess.Entities.Room", "RoomChanged")
                         .WithMany("StateChanges")
-                        .HasForeignKey("RoomChangedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomChangedId");
 
                     b.Navigation("RoomChanged");
                 });

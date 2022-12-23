@@ -221,7 +221,7 @@ namespace ThirdEye.Back.Controllers
         }
 
 #if DEBUG
-        [HttpGet]
+        [HttpDelete]
         public async Task<IActionResult> DeleteUserAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

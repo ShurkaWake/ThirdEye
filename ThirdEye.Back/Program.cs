@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ThirdEye.Back.DataAccess.Contexts;
 using ThirdEye.Back.DataAccess.Entities;
 using ThirdEye.Back.Extensions;
@@ -23,6 +25,7 @@ services.AddTransient<IEmailSender, EmailSender>();
 services.AddControllersWithViews().AddDataAnnotationsLocalization();
 var mapperConfig = new MapperConfiguration(mc =>
 {
+    mc.AddProfile(new BusinessMapper());
     mc.AddProfile(new UserMapper());
 });
 services.AddSingleton(mapperConfig.CreateMapper() as IMapper);
@@ -43,7 +46,12 @@ services.AddDbContext<ApplicationContext>(options =>
     });
 });
 
-services.AddControllers();
+services
+    .AddControllers()
+    .AddJsonOptions(option =>
+    {
+        option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 services.AddLocalization(options => { options.ResourcesPath = "Resources"; });
 

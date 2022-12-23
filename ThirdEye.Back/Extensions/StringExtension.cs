@@ -15,7 +15,7 @@ namespace ThirdEye.Back.Extensions
             new UnauthorizedObjectResult(new[] { @this.Using(localizer) });
 
         public static ForbidResult ToForbiddedUsing(this string @this, IStringLocalizer localizer) =>
-            new ForbidResult(new[] { @this.Using(localizer) });
+            new (new[] { @this.Using(localizer) });
 
         public static NotFoundObjectResult ToNotFoundUsing(this string @this, IStringLocalizer localizer) =>
             new NotFoundObjectResult(new[] { @this.Using(localizer) });

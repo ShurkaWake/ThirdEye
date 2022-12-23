@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace ThirdEye.Back.Controllers.Abstratctions
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [Authorize]
     public abstract class AuthorizedControllerBase : Controller
     {
-        protected AuthorizedControllerBase()
+        protected AuthorizedControllerBase(UserManager<User> userManager)
         {
-
+            UserManager = userManager;
         }
 
         protected UserManager<User> UserManager { get; set; }

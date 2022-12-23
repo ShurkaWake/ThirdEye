@@ -1,0 +1,154 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace ThirdEye.Back.DataAccess.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddedRequiredFields : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Workers_AspNetUsers_WorkerAccountId",
+                table: "Workers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Workers_Businesses_JobId",
+                table: "Workers");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "WorkerAccountId",
+                table: "Workers",
+                type: "text",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "JobId",
+                table: "Workers",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Name",
+                table: "Businesses",
+                type: "text",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "LastName",
+                table: "AspNetUsers",
+                type: "text",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "FirstName",
+                table: "AspNetUsers",
+                type: "text",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Workers_AspNetUsers_WorkerAccountId",
+                table: "Workers",
+                column: "WorkerAccountId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Workers_Businesses_JobId",
+                table: "Workers",
+                column: "JobId",
+                principalTable: "Businesses",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Workers_AspNetUsers_WorkerAccountId",
+                table: "Workers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Workers_Businesses_JobId",
+                table: "Workers");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "WorkerAccountId",
+                table: "Workers",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "JobId",
+                table: "Workers",
+                type: "integer",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "integer");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Name",
+                table: "Businesses",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "LastName",
+                table: "AspNetUsers",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "FirstName",
+                table: "AspNetUsers",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Workers_AspNetUsers_WorkerAccountId",
+                table: "Workers",
+                column: "WorkerAccountId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Workers_Businesses_JobId",
+                table: "Workers",
+                column: "JobId",
+                principalTable: "Businesses",
+                principalColumn: "Id");
+        }
+    }
+}
