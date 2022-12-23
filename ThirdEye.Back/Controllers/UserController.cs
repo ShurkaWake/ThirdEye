@@ -1,27 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using ThirdEye.Back.DataAccess.Entities;
 using ThirdEye.Back.Requests.User;
-using ThirdEye.Back.Mapping;
 using ThirdEye.Back.DataAccess.Contexts;
 using ThirdEye.Back.Responses.User;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using System.Text.Encodings.Web;
-using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ThirdEye.Back.Extensions;
-using ThirdEye.Back.Constants.Wording;
-
-using static ThirdEye.Back.Constants.Wording.UserWording;
-using Org.BouncyCastle.Asn1.IsisMtt.X509;
-using ThirdEye.Back.Services;
 using ThirdEye.Back.Services.Abstractions;
 using System.Web;
+
+using static ThirdEye.Back.Constants.Wording.UserWording;
 
 namespace ThirdEye.Back.Controllers
 {
@@ -193,31 +184,36 @@ namespace ThirdEye.Back.Controllers
             string callbackPage = _configuration["MessagePage"];
             if (id == null || token == null)
             {
-                return Redirect(string.Format(callbackPage,
-                                              InvalidUserOrTokenMessage.Using(_localizer)));
+                var uri = new Uri(string.Format(callbackPage,
+                                                InvalidUserOrTokenMessage.Using(_localizer)));
+                return Redirect(uri.AbsoluteUri);
             }
 
             var user = await _userManager.FindByIdAsync(id);
             if (user is null)
             {
-                return Redirect(string.Format(callbackPage,
-                                              NullUserMessage.Using(_localizer)));
+                var uri = new Uri(string.Format(callbackPage,
+                                                NullUserMessage.Using(_localizer)));
+                return Redirect(uri.AbsoluteUri);
             }
             else if (user.EmailConfirmed)
             {
-                return Redirect(string.Format(callbackPage,
-                                              EmailAlreadyConfirmedMessage.Using(_localizer)));
+                var uri = new Uri(string.Format(callbackPage,
+                                                EmailAlreadyConfirmedMessage.Using(_localizer)));
+                return Redirect(uri.AbsoluteUri);
             }
 
             var result = await _userManager.ConfirmEmailAsync(user!, token);
             if (!result.Succeeded)
             {
-                return Redirect(string.Format(callbackPage, 
-                                              UnexpectedErrorMessage.Using(_localizer)));
+                var uri = new Uri(string.Format(callbackPage,
+                                                UnexpectedErrorMessage.Using(_localizer)));
+                return Redirect(uri.AbsoluteUri);
             }
 
-            return Redirect(string.Format(callbackPage,
-                                          EmailSuccessfullyConfirmedMessage.Using(_localizer)));
+            var redirect = new Uri(string.Format(callbackPage,
+                                            EmailSuccessfullyConfirmedMessage.Using(_localizer)));
+            return Redirect(redirect.AbsoluteUri);
         }
 
 #if DEBUG
@@ -235,6 +231,13 @@ namespace ThirdEye.Back.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var result = _context.Users.ToArray();
+            return Ok(result);
         }
     }
 #endif
