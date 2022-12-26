@@ -1,12 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using static ThirdEye.Back.Constants.Wording.UserWording;
+
 namespace ThirdEye.Back.Requests.User
 {
     public class EditRequest
     {
-        public string FirstName { get; set; } = string.Empty;
+        [Required(ErrorMessage = FirstNameRequiredMessage)]
+        public string FirstName { get; set; }
 
-        public string LastName { get; set; } = string.Empty;
+        [Required(ErrorMessage = LastNameRequiredMessage)]
+        public string LastName { get; set; }
 
         public string Patronymic { get; set; } = string.Empty;
     }

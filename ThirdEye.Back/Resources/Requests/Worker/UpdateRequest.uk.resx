@@ -117,25 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Something went wrong :( Please try again later" xml:space="preserve">
-    <value>Щось пішло не так :( Спробуйте пізніше</value>
+  <data name="Id is a required field" xml:space="preserve">
+    <value>"Id" це обов'язкове поле</value>
   </data>
-  <data name="There is no business that matches with providen data" xml:space="preserve">
-    <value>За переданими данними не вдалося знайти підприємство</value>
-  </data>
-  <data name="This action can be done only by business manager. No access granted" xml:space="preserve">
-    <value>Ця дія може бути виконана тільки менеджером бізнесу. Доступ не отриманий</value>
-  </data>
-  <data name="Unable to create this business" xml:space="preserve">
-    <value>Неможливо створити це підприємство</value>
-  </data>
-  <data name="Unable to delete this business" xml:space="preserve">
-    <value>Неможливо видалити це підприємство</value>
-  </data>
-  <data name="Unable to update this business" xml:space="preserve">
-    <value>Неможливо оновити дані цього підприємства</value>
-  </data>
-  <data name="User is not worker of this business. No access granted" xml:space="preserve">
-    <value>Користувач не робітник підприємства. Доступ не отриманий</value>
+  <data name="Role is a required field" xml:space="preserve">
+    <value>Роль це обов'язкове поле</value>
   </data>
 </root>

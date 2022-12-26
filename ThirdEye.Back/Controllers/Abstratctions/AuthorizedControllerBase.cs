@@ -18,5 +18,23 @@ namespace ThirdEye.Back.Controllers.Abstratctions
         protected UserManager<User> UserManager { get; set; }
         protected async Task<User> GetUser() => await UserManager.GetUserAsync(User);
         protected string GetUserId() => UserManager.GetUserId(User);
+
+        protected bool IsWorkerOf(Business business)
+        {
+            var userId = UserManager.GetUserId(User);
+            var res = business.Workers.FirstOrDefault
+                (x => x.WorkerAccount.Id == userId);
+
+            return res is not default(BusinessWorker);
+        }
+
+        protected bool IsManagerOf(Business business)
+        {
+            var userId = UserManager.GetUserId(User);
+            var res = business.Workers.FirstOrDefault
+                (x => x.WorkerAccount.Id == userId && x.WorkerRole == Role.Manager);
+
+            return res is not default(BusinessWorker);
+        }
     }
 }

@@ -3,6 +3,8 @@
     public static class BusinessWording
     {
         public const string NameRequiredMessage = "Name is a required field";
+        public const string IdRequiredMessage = "Id is a required field";
+
         public const string UnableToCreateMessage = "Unable to create this business";
         public const string UnableToUpdateMessage = "Unable to update this business";
         public const string UnableToDeleteMessage = "Unable to delete this business";

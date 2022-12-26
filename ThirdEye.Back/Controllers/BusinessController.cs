@@ -161,23 +161,5 @@ namespace ThirdEye.Back.Controllers
 
             return Ok(business);
         }
-
-        private bool IsWorkerOf(Business business)
-        {
-            var userId = UserManager.GetUserId(User);
-            var res = business.Workers.FirstOrDefault
-                (x => x.WorkerAccount.Id == userId);
-
-            return res is not default(BusinessWorker);
-        }
-
-        private bool IsManagerOf(Business business)
-        {
-            var userId = UserManager.GetUserId(User);
-            var res = business.Workers.FirstOrDefault
-                (x => x.WorkerAccount.Id == userId && x.WorkerRole == Role.Manager);
-
-            return res is not default(BusinessWorker);
-        }
     }
 }
