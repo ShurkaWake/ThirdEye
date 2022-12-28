@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace ThirdEye.Back.DataAccess.Entities
 {
-    public class RoomStateRecords
+    public class RoomStateRecord
     {
         [Required]
         public int Id { get; set; }

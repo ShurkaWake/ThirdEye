@@ -10,11 +10,20 @@ namespace ThirdEye.Back.Constants
             Role.Worker,
         };
 
-        public static TimeSpan ThirtyDays
+        public static TimeSpan Day
         {
             get
             {
-                var res = new TimeSpan(TimeSpan.TicksPerDay * 30);
+                var res = new TimeSpan(TimeSpan.TicksPerDay);
+                return res;
+            }
+        }
+
+        public static TimeSpan StateLiveTime
+        {
+            get
+            {
+                var res = new TimeSpan(TimeSpan.TicksPerMinute * 5);
                 return res;
             }
         }

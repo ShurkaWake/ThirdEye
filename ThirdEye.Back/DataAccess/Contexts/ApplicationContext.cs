@@ -17,6 +17,6 @@ namespace ThirdEye.Back.DataAccess.Contexts
         public DbSet<BusinessWorker> Workers { get; set; }
         public DbSet<Business> Businesses { get; set; }
         public DbSet<Room> Rooms { get; set; }
-        public DbSet<RoomStateRecords> RoomsStateHistories { get; set; }
+        public DbSet<RoomStateRecord> RoomsStateHistories { get; set; }
     }
 }

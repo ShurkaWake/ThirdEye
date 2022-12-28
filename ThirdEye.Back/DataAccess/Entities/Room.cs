@@ -21,7 +21,7 @@ namespace ThirdEye.Back.DataAccess.Entities
         [Required]
         public DateTime LastDeviceResponceTime { get; set; } 
         
-        public IEnumerable<RoomStateRecords> StateRecords { get; set; }
+        public IEnumerable<RoomStateRecord> StateRecords { get; set; }
         public IEnumerable<Device> Devices { get; set; }
     }
 }

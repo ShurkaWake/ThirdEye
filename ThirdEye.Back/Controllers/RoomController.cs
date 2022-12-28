@@ -51,7 +51,7 @@ namespace ThirdEye.Back.Controllers
                 BusinessLocated = business,
                 Name = model.Name,
                 CurrentState = RoomState.Empty,
-                LastDeviceResponceTime = DateTime.Now,
+                LastDeviceResponceTime = DateTime.UtcNow,
             };
 
             try
@@ -169,11 +169,20 @@ namespace ThirdEye.Back.Controllers
                     x.Id,
                     x.Name,
                     x.CurrentState,
-                    x.StateRecords
-                        .Where(state => (DateTime.Now - state.StartTime) > ThirtyDays)
-                        .Sum(state => state.StateTimeSeconds / (double) ThirtyDays.Seconds)
+                    GetCurrentStateSecondsIfUnempty(x) + x.StateRecords
+                        .Where(state => (DateTime.UtcNow - state.StartTime) < Day)
+                        .Sum(state => state.StateTimeSeconds / (double) Day.TotalSeconds)
                     );
             }));
+        }
+
+        private double GetCurrentStateSecondsIfUnempty(Room room)
+        {
+            if (room.CurrentState == RoomState.Unempty)
+            {
+                return (DateTime.UtcNow - room.LastDeviceResponceTime).TotalSeconds / (double) Day.TotalSeconds;
+            }
+            return 0.0;
         }
     }
 }

@@ -13,8 +13,6 @@ namespace ThirdEye.Back.DataAccess.Entities
         [Required]
         public string SerialNumber { get; set; }
 
-        public DeviceState LastState { get; set; }
-
         [Required]
         [JsonIgnore]
         public Room InstalationRoom { get; set; }
