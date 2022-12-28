@@ -9,5 +9,14 @@ namespace ThirdEye.Back.Constants
             Role.Manager,
             Role.Worker,
         };
+
+        public static TimeSpan ThirtyDays
+        {
+            get
+            {
+                var res = new TimeSpan(TimeSpan.TicksPerDay * 30);
+                return res;
+            }
+        }
     }
 }

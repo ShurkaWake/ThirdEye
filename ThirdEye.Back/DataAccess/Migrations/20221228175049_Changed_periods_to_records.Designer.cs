@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThirdEye.Back.DataAccess.Contexts;
@@ -11,9 +12,11 @@ using ThirdEye.Back.DataAccess.Contexts;
 namespace ThirdEye.Back.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221228175049_Changed_periods_to_records")]
+    partial class Changedperiodstorecords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,9 +274,6 @@ namespace ThirdEye.Back.DataAccess.Migrations
                     b.Property<int>("State")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StateTimeSeconds")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
@@ -449,7 +449,7 @@ namespace ThirdEye.Back.DataAccess.Migrations
             modelBuilder.Entity("ThirdEye.Back.DataAccess.Entities.RoomStateRecords", b =>
                 {
                     b.HasOne("ThirdEye.Back.DataAccess.Entities.Room", "Room")
-                        .WithMany("StateRecords")
+                        .WithMany("UnemptyPeriods")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -468,7 +468,7 @@ namespace ThirdEye.Back.DataAccess.Migrations
                 {
                     b.Navigation("Devices");
 
-                    b.Navigation("StateRecords");
+                    b.Navigation("UnemptyPeriods");
                 });
 
             modelBuilder.Entity("ThirdEye.Back.DataAccess.Entities.User", b =>

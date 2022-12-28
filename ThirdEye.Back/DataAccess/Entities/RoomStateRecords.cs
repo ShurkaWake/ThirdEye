@@ -1,16 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ThirdEye.Back.DataAccess.Entities
 {
-    public class RoomStateChange
+    public class RoomStateRecords
     {
         [Required]
         public int Id { get; set; }
+
         [Required]
-        public DateTime ChangeTime { get; set; }
+        public DateTime StartTime { get; set; }
+
         [Required]
         public RoomState State { get; set; }
+
         [Required]
-        public Room RoomChanged { get; set; }
+        public int StateTimeSeconds { get; set; }
+
+        [Required]
+        [JsonIgnore]
+        public Room Room { get; set; }
     }
 }

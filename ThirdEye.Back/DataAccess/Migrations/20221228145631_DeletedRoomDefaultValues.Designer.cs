@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ThirdEye.Back.DataAccess.Contexts;
@@ -11,9 +12,11 @@ using ThirdEye.Back.DataAccess.Contexts;
 namespace ThirdEye.Back.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221228145631_DeletedRoomDefaultValues")]
+    partial class DeletedRoomDefaultValues
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,9 +223,6 @@ namespace ThirdEye.Back.DataAccess.Migrations
 
                     b.HasIndex("InstalationRoomId");
 
-                    b.HasIndex("SerialNumber")
-                        .IsUnique();
-
                     b.ToTable("Devices");
                 });
 
@@ -240,8 +240,8 @@ namespace ThirdEye.Back.DataAccess.Migrations
                     b.Property<int>("CurrentState")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("LastDeviceResponceTime")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime>("CurrentStateStartTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -254,7 +254,7 @@ namespace ThirdEye.Back.DataAccess.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("ThirdEye.Back.DataAccess.Entities.RoomStateRecords", b =>
+            modelBuilder.Entity("ThirdEye.Back.DataAccess.Entities.RoomUnemptyPeriod", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -262,17 +262,14 @@ namespace ThirdEye.Back.DataAccess.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("RoomId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("State")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StateTimeSeconds")
-                        .HasColumnType("integer");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -446,10 +443,10 @@ namespace ThirdEye.Back.DataAccess.Migrations
                     b.Navigation("BusinessLocated");
                 });
 
-            modelBuilder.Entity("ThirdEye.Back.DataAccess.Entities.RoomStateRecords", b =>
+            modelBuilder.Entity("ThirdEye.Back.DataAccess.Entities.RoomUnemptyPeriod", b =>
                 {
                     b.HasOne("ThirdEye.Back.DataAccess.Entities.Room", "Room")
-                        .WithMany("StateRecords")
+                        .WithMany("UnemptyPeriods")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -468,7 +465,7 @@ namespace ThirdEye.Back.DataAccess.Migrations
                 {
                     b.Navigation("Devices");
 
-                    b.Navigation("StateRecords");
+                    b.Navigation("UnemptyPeriods");
                 });
 
             modelBuilder.Entity("ThirdEye.Back.DataAccess.Entities.User", b =>
