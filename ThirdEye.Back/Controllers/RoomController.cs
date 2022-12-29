@@ -169,18 +169,21 @@ namespace ThirdEye.Back.Controllers
                     x.Id,
                     x.Name,
                     x.CurrentState,
-                    GetCurrentStateSecondsIfUnempty(x) + x.StateRecords
+                    100 * (GetCurrentStateSecondsIfUnempty(x) + x.StateRecords
                         .Where(state => (DateTime.UtcNow - state.StartTime) < Day)
                         .Sum(state => state.StateTimeSeconds / (double) Day.TotalSeconds)
-                    );
+                    ));
             }));
         }
 
         private double GetCurrentStateSecondsIfUnempty(Room room)
         {
+            DateTime operationTime = DateTime.UtcNow;
             if (room.CurrentState == RoomState.Unempty)
             {
-                return (DateTime.UtcNow - room.LastDeviceResponceTime).TotalSeconds / (double) Day.TotalSeconds;
+                return (operationTime - room.LastDeviceResponceTime < StateLiveTime)
+                       ? (DateTime.UtcNow - room.LastDeviceResponceTime).TotalSeconds / (double) Day.TotalSeconds
+                       : StateLiveTime.TotalSeconds / (double) Day.TotalSeconds;
             }
             return 0.0;
         }

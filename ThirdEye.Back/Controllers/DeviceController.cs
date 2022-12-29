@@ -131,7 +131,9 @@ namespace ThirdEye.Back.Controllers
                     Room = device.InstalationRoom,
                     StartTime = device.InstalationRoom.LastDeviceResponceTime,
                     State = state,
-                    StateTimeSeconds = (int) stateTime.TotalSeconds
+                    StateTimeSeconds = stateTime < StateLiveTime
+                                       ? (int)stateTime.TotalSeconds
+                                       : (int)StateLiveTime.TotalSeconds,
                 };
                 _context.RoomsStateHistories.Add(roomState);
                 device.InstalationRoom.CurrentState = state;
