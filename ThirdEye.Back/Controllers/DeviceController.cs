@@ -9,6 +9,7 @@ using ThirdEye.Back.Requests.Device;
 using static ThirdEye.Back.Constants.Wording.DeviceWording;
 using static ThirdEye.Back.Constants.ControllerConstants;
 using ThirdEye.Back.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ThirdEye.Back.Controllers
 {
@@ -97,57 +98,6 @@ namespace ThirdEye.Back.Controllers
             catch (Exception ex)
             {
                 return UnexpectedErrorMessage.ToBadRequestUsing(_localizer);
-            }
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostStateAsync(string serialNumber, RoomState state)
-        {
-            var device = await _context.Devices
-                .Include(x => x.InstalationRoom)
-                .ThenInclude(x => x.StateRecords)
-                .FirstOrDefaultAsync(x => x.SerialNumber == serialNumber);
-            if (device is default(Device))
-            {
-                return BadRequest();
-            }
-
-            var operationTime = DateTime.UtcNow;
-            var stateTime = operationTime - device.InstalationRoom.LastDeviceResponceTime;
-
-            if (state != device.InstalationRoom.CurrentState
-                && device.InstalationRoom.CurrentState == RoomState.Unempty
-                && stateTime < StateLiveTime)
-            {
-                return Ok();
-            }
-
-            try
-            {
-                var roomState = new RoomStateRecord()
-                {
-                    Room = device.InstalationRoom,
-                    StartTime = device.InstalationRoom.LastDeviceResponceTime,
-                    State = state,
-                    StateTimeSeconds = stateTime < StateLiveTime
-                                       ? (int)stateTime.TotalSeconds
-                                       : (int)StateLiveTime.TotalSeconds,
-                };
-                _context.RoomsStateHistories.Add(roomState);
-                device.InstalationRoom.CurrentState = state;
-                device.InstalationRoom.LastDeviceResponceTime = operationTime;
-
-                var result = await _context.SaveChangesAsync() > 0;
-                if (!result)
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
             }
 
             return Ok();

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ThirdEye.IoT_Simulation": {
+      "commandName": "Project",
+      "commandLineArgs": "2812202200000002\r\n1\r\n49169"
+    }
+  }
+}

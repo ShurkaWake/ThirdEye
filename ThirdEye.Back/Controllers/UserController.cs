@@ -239,6 +239,6 @@ namespace ThirdEye.Back.Controllers
             var result = _context.Users.ToArray();
             return Ok(result);
         }
-    }
 #endif
+    }
 }
